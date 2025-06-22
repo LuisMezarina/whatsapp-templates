@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
         actualizarEstadisticas(plantillas);
     });
     
-    // Renderizar estado inicial
+    // Renderizar estado inicial (ya incluye datos desde localStorage)
     const plantillasIniciales = window.templateStore.getState();
     renderizarUI(plantillasIniciales);
     actualizarEstadisticas(plantillasIniciales);
@@ -51,7 +51,7 @@ function guardarPlantilla() {
     // Crear nueva instancia de Template
     const newTemplate = new Template(inputTitle, inputMessage, inputHashtag);
     
-    // Agregar a la Store (esto automáticamente actualizará la UI)
+    // Agregar a la Store (esto automáticamente guardará en localStorage y actualizará la UI)
     window.templateStore.addTemplate(newTemplate);
     
     // Limpiar formulario después de guardar
@@ -64,11 +64,22 @@ function guardarPlantilla() {
 // Función para eliminar una plantilla
 function eliminarPlantilla(index) {
     if (confirm("¿Estás seguro de que deseas eliminar esta plantilla?")) {
-        // Eliminar de la Store (esto automáticamente actualizará la UI)
+        // Eliminar de la Store (esto automáticamente actualizará localStorage y la UI)
         window.templateStore.removeTemplate(index);
         
         // Feedback visual
         mostrarNotificacion("🗑️ Plantilla eliminada");
+    }
+}
+
+// Función para resetear todas las plantillas
+function resetearTodasLasPlantillas() {
+    if (confirm("¿Estás seguro de que deseas eliminar TODAS las plantillas? Esta acción no se puede deshacer.")) {
+        // Resetear en la Store (esto automáticamente limpiará localStorage y actualizará la UI)
+        window.templateStore.resetAllTemplates();
+        
+        // Feedback visual
+        mostrarNotificacion("🔄 Todas las plantillas han sido eliminadas");
     }
 }
 
@@ -90,7 +101,7 @@ function renderizarUI(plantillas) {
     emptyState.classList.add("hidden");
     
     // Renderizar cada plantilla
-    plantillas.forEach((plantilla, index) => {
+    window.templateStore.getState().forEach((plantilla, index) => {
         containerTemplate.innerHTML += crearHTMLPlantilla(plantilla, index);
     });
 }
@@ -241,3 +252,5 @@ function mostrarNotificacion(mensaje) {
         }, 300);
     }, 3000);
 }
+
+window.templateStore.subscribe(renderizarUI)
