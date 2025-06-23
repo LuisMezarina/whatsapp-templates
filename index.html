@@ -6,10 +6,20 @@
     <title>Gestor de Plantillas WhatsApp</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Font Awesome para iconos -->
+    <script>
+      // Configurar Tailwind para modo oscuro
+      tailwind.config = { darkMode: 'class' }
+    </script>
+    <script>
+      // Prevenir flash de contenido claro
+      if (localStorage.getItem('darkMode') === 'true' || 
+         (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   </head>
-  <body class="bg-gradient-to-br from-green-50 to-emerald-100 min-h-screen">
+  <body class="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-gray-900 dark:to-gray-800 min-h-screen transition-colors duration-300">
     <div class="container mx-auto max-w-6xl px-4 py-8">
       <!-- Header -->
       <header class="text-center mb-10">
@@ -17,21 +27,21 @@
           <div class="bg-green-500 p-3 rounded-full shadow-lg">
             <i class="fab fa-whatsapp text-white text-3xl"></i>
           </div>
-          <h1 class="text-4xl font-bold text-gray-800">Gestor de Plantillas</h1>
+          <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-200">Gestor de Plantillas</h1>
         </div>
-        <p class="text-gray-600 text-lg">
+        <p class="text-gray-600 dark:text-gray-400 text-lg">
           Administra y organiza tus plantillas de mensajes de WhatsApp
         </p>
       </header>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Formulario para crear plantillas -->
-        <div class="bg-white rounded-xl shadow-xl p-8 border border-gray-100">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 border border-gray-100 dark:border-gray-700 transition-colors duration-300">
           <div class="flex items-center gap-3 mb-6">
             <div class="bg-blue-500 p-2 rounded-lg">
               <i class="fas fa-plus text-white"></i>
             </div>
-            <h2 class="text-2xl font-semibold text-gray-800">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">
               Nueva Plantilla
             </h2>
           </div>
@@ -41,7 +51,7 @@
             <div>
               <label
                 for="template-title"
-                class="block text-sm font-medium text-gray-700 mb-2"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >
                 <i class="fas fa-heading text-blue-500 mr-2"></i>
                 Título de la Plantilla
@@ -50,7 +60,7 @@
                 type="text"
                 id="template-title"
                 placeholder="Ej: Bienvenida a nuevos clientes"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 bg-gray-50 hover:bg-white"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 bg-gray-50 dark:bg-gray-700 hover:bg-white dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
               />
             </div>
 
@@ -58,7 +68,7 @@
             <div>
               <label
                 for="template-hashtag"
-                class="block text-sm font-medium text-gray-700 mb-2"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >
                 <i class="fas fa-hashtag text-green-500 mr-2"></i>
                 Hashtag (Categoría)
@@ -67,7 +77,7 @@
                 type="text"
                 id="template-hashtag"
                 placeholder="Ej: #bienvenida #ventas #soporte"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-300 bg-gray-50 hover:bg-white"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-300 bg-gray-50 dark:bg-gray-700 hover:bg-white dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
               />
             </div>
 
@@ -75,7 +85,7 @@
             <div>
               <label
                 for="template-message"
-                class="block text-sm font-medium text-gray-700 mb-2"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >
                 <i class="fas fa-comment-dots text-purple-500 mr-2"></i>
                 Mensaje de la Plantilla
@@ -84,14 +94,14 @@
                 id="template-message"
                 rows="6"
                 placeholder="Escribe aquí el contenido de tu plantilla de WhatsApp..."
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition duration-300 bg-gray-50 hover:bg-white resize-none"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition duration-300 bg-gray-50 dark:bg-gray-700 hover:bg-white dark:hover:bg-gray-600 resize-none text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
               ></textarea>
               <div class="flex justify-between mt-2">
-                <span class="text-xs text-gray-500">
+                <span class="text-xs text-gray-500 dark:text-gray-400">
                   <i class="fas fa-info-circle mr-1"></i>
                   Usa variables como {nombre}, {empresa}, etc.
                 </span>
-                <span class="text-xs text-gray-400" id="char-count"
+                <span class="text-xs text-gray-400 dark:text-gray-500" id="char-count"
                   >0/1000 caracteres</span
                 >
               </div>
@@ -110,7 +120,7 @@
               <button
                 type="button"
                 id="clear-form-btn"
-                class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300 flex items-center justify-center gap-2 font-medium shadow-md hover:shadow-lg"
+                class="px-6 py-3 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition duration-300 flex items-center justify-center gap-2 font-medium shadow-md hover:shadow-lg"
               >
                 <i class="fas fa-eraser"></i>
                 <span>Limpiar</span>
@@ -120,16 +130,16 @@
         </div>
 
         <!-- Vista previa -->
-        <div class="bg-white rounded-xl shadow-xl p-8 border border-gray-100">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 border border-gray-100 dark:border-gray-700 transition-colors duration-300">
           <div class="flex items-center gap-3 mb-6">
             <div class="bg-green-500 p-2 rounded-lg">
               <i class="fas fa-eye text-white"></i>
             </div>
-            <h2 class="text-2xl font-semibold text-gray-800">Vista Previa</h2>
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Vista Previa</h2>
           </div>
 
           <!-- Simulador de WhatsApp -->
-          <div class="bg-gray-100 rounded-lg p-4 max-w-sm mx-auto">
+          <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 max-w-sm mx-auto transition-colors duration-300">
             <div
               class="bg-green-500 text-white p-3 rounded-t-lg flex items-center gap-3"
             >
@@ -144,20 +154,20 @@
               </div>
             </div>
 
-            <div class="bg-white p-4 rounded-b-lg min-h-[200px]">
-              <div id="preview-content" class="text-gray-400 text-sm italic">
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-b-lg min-h-[200px] transition-colors duration-300">
+              <div id="preview-content" class="text-gray-400 dark:text-gray-500 text-sm italic">
                 La vista previa aparecerá aquí mientras escribes...
               </div>
             </div>
           </div>
 
           <!-- Info adicional -->
-          <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <h4 class="font-medium text-blue-800 mb-2">
+          <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-700 transition-colors duration-300">
+            <h4 class="font-medium text-blue-800 dark:text-blue-300 mb-2">
               <i class="fas fa-lightbulb mr-2"></i>
               Consejos para plantillas efectivas:
             </h4>
-            <ul class="text-sm text-blue-700 space-y-1">
+            <ul class="text-sm text-blue-700 dark:text-blue-400 space-y-1">
               <li>• Mantén los mensajes concisos y directos</li>
               <li>• Usa variables para personalizar contenido</li>
               <li>• Incluye llamadas a la acción claras</li>
@@ -169,7 +179,7 @@
 
       <!-- Sección de plantillas guardadas -->
       <div
-        class="mt-12 bg-white rounded-xl shadow-xl p-8 border border-gray-100"
+        class="mt-12 bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
       >
         <div
           class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"
@@ -178,7 +188,7 @@
             <div class="bg-purple-500 p-2 rounded-lg">
               <i class="fas fa-folder-open text-white"></i>
             </div>
-            <h2 class="text-2xl font-semibold text-gray-800">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">
               Plantillas Guardadas
             </h2>
           </div>
@@ -189,13 +199,13 @@
               <input
                 type="text"
                 placeholder="Buscar plantillas..."
-                class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 w-full sm:w-64"
+                class="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 w-full sm:w-64 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
                 id="search-templates"
               />
-              <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+              <i class="fas fa-search absolute left-3 top-3 text-gray-400 dark:text-gray-500"></i>
             </div>
             <select
-              class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+              class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300"
               id="filter-hashtag"
             >
               <option value="">Todos los hashtags</option>
@@ -210,36 +220,36 @@
         <div id="templates-container" class="space-y-4">
           <!-- Plantilla de ejemplo 1 -->
           <div
-            class="bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-purple-300 transition duration-300 hover:shadow-md"
+            class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 transition duration-300 hover:shadow-md"
           >
             <div class="flex flex-col lg:flex-row lg:items-start gap-4">
               <div class="flex-1">
                 <div class="flex items-start justify-between mb-3">
                   <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-1">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-1">
                       Mensaje de Bienvenida
                     </h3>
                     <div class="flex gap-2 mb-2">
                       <span
-                        class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full"
+                        class="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 text-xs px-2 py-1 rounded-full"
                         >#bienvenida</span
                       >
                       <span
-                        class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"
+                        class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 text-xs px-2 py-1 rounded-full"
                         >#nuevos-clientes</span
                       >
                     </div>
                   </div>
-                  <div class="text-xs text-gray-500">
+                  <div class="text-xs text-gray-500 dark:text-gray-400">
                     <i class="fas fa-calendar mr-1"></i>
                     Creado hace 2 días
                   </div>
                 </div>
 
                 <div
-                  class="bg-white p-4 rounded-lg border border-gray-200 mb-4"
+                  class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-600 mb-4 transition-colors duration-300"
                 >
-                  <p class="text-gray-700 text-sm leading-relaxed">
+                  <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
                     ¡Hola {nombre}! 👋<br /><br />
                     Bienvenido/a a {empresa}. Estamos emocionados de tenerte
                     como parte de nuestra comunidad.<br /><br />
@@ -277,149 +287,57 @@
 
         <!-- Estado vacío -->
         <div id="empty-templates-state" class="text-center py-16 hidden">
-          <i class="fas fa-folder-open text-6xl text-gray-300 mb-4"></i>
-          <p class="text-gray-500 text-xl mb-2">No hay plantillas guardadas</p>
-          <p class="text-gray-400">¡Crea tu primera plantilla para comenzar!</p>
+          <i class="fas fa-folder-open text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+          <p class="text-gray-500 dark:text-gray-400 text-xl mb-2">No hay plantillas guardadas</p>
+          <p class="text-gray-400 dark:text-gray-500">¡Crea tu primera plantilla para comenzar!</p>
         </div>
       </div>
 
       <!-- Estadísticas -->
       <div
-        class="mt-8 bg-white rounded-xl shadow-xl p-6 border border-gray-100"
+        class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
       >
         <h3
-          class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+          class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2"
         >
           <i class="fas fa-chart-bar text-indigo-500"></i>
           Estadísticas de Plantillas
         </h3>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div class="text-center p-4 bg-blue-50 rounded-lg">
-            <i class="fas fa-file-alt text-2xl text-blue-600 mb-2"></i>
-            <h4 class="text-sm font-medium text-gray-700">Total</h4>
-            <p class="text-xl font-bold text-blue-600" id="total-templates">
+          <div class="text-center p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg transition-colors duration-300">
+            <i class="fas fa-file-alt text-2xl text-blue-600 dark:text-blue-400 mb-2"></i>
+            <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">Total</h4>
+            <p class="text-xl font-bold text-blue-600 dark:text-blue-400" id="total-templates">
               3
             </p>
           </div>
-          <div class="text-center p-4 bg-green-50 rounded-lg">
-            <i class="fas fa-tags text-2xl text-green-600 mb-2"></i>
-            <h4 class="text-sm font-medium text-gray-700">Categorías</h4>
-            <p class="text-xl font-bold text-green-600" id="total-categories">
+          <div class="text-center p-4 bg-green-50 dark:bg-green-900/30 rounded-lg transition-colors duration-300">
+            <i class="fas fa-tags text-2xl text-green-600 dark:text-green-400 mb-2"></i>
+            <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">Categorías</h4>
+            <p class="text-xl font-bold text-green-600 dark:text-green-400" id="total-categories">
               6
             </p>
           </div>
-          <div class="text-center p-4 bg-purple-50 rounded-lg">
-            <i class="fas fa-clock text-2xl text-purple-600 mb-2"></i>
-            <h4 class="text-sm font-medium text-gray-700">Recientes</h4>
-            <p class="text-xl font-bold text-purple-600" id="recent-templates">
+          <div class="text-center p-4 bg-purple-50 dark:bg-purple-900/30 rounded-lg transition-colors duration-300">
+            <i class="fas fa-clock text-2xl text-purple-600 dark:text-purple-400 mb-2"></i>
+            <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">Recientes</h4>
+            <p class="text-xl font-bold text-purple-600 dark:text-purple-400" id="recent-templates">
               1
             </p>
           </div>
-          <div class="text-center p-4 bg-orange-50 rounded-lg">
-            <i class="fas fa-star text-2xl text-orange-600 mb-2"></i>
-            <h4 class="text-sm font-medium text-gray-700">Más Usadas</h4>
-            <p class="text-xl font-bold text-orange-600" id="most-used">2</p>
+          <div class="text-center p-4 bg-orange-50 dark:bg-orange-900/30 rounded-lg transition-colors duration-300">
+            <i class="fas fa-star text-2xl text-orange-600 dark:text-orange-400 mb-2"></i>
+            <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">Más Usadas</h4>
+            <p class="text-xl font-bold text-orange-600 dark:text-orange-400" id="most-used">2</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Librerías necesarias -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
-    <!-- Scripts de la aplicación -->
     <script src="./js/models/models.js"></script>
     <script src="./js/persistence.js"></script>
     <script src="./js/store.js"></script>
     <script src="./js/app.js"></script>
-    <script src="./js/export-pdf.js"></script>
-    <script type="module" src="js/export-pdf.js"></script>
-
-    <!-- Asegúrate de tener este botón en tu HTML -->
-<button id="exportar-pdf">Exportar PDF</button>
-
-<!-- Librería jsPDF (debe ir ANTES del script que la usa) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<!-- Script para exportar a PDF (pegar completo antes del </body>) -->
-<script>
-  function obtenerPlantillas() {
-    return JSON.parse(localStorage.getItem('plantillas')) || [];
-  }
-
-  async function cargarLibreriajsPDF() {
-    if (!window.jspdf || !window.jspdf.jsPDF) {
-      return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-        script.onload = () => {
-          if (window.jspdf && window.jspdf.jsPDF) resolve();
-          else reject(new Error('jsPDF no cargó correctamente'));
-        };
-        script.onerror = () => reject(new Error('Error al cargar jsPDF'));
-        document.head.appendChild(script);
-      });
-    }
-  }
-
-  function generarDocumentoPDF(plantillas) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    doc.setFontSize(16);
-    doc.text('Mis Plantillas de WhatsApp', 20, 20);
-
-    let y = 35;
-    const espacio = 10;
-
-    plantillas.forEach((plantilla, index) => {
-      doc.setFontSize(12);
-      doc.text(`${index + 1}. ${plantilla.nombre}`, 20, y);
-      y += espacio;
-
-      const mensaje = doc.splitTextToSize(plantilla.mensaje, 160);
-      mensaje.forEach(linea => {
-        doc.text(linea, 25, y);
-        y += 7;
-      });
-
-      y += 5;
-
-      if (y > 270) {
-        doc.addPage();
-        y = 20;
-      }
-    });
-
-    doc.save('plantillas.pdf');
-  }
-
-  async function exportarPlantillasAPDF() {
-    try {
-      await cargarLibreriajsPDF();
-
-      const plantillas = obtenerPlantillas();
-
-      if (!plantillas.length) {
-        alert('No hay plantillas para exportar.');
-        return;
-      }
-
-      generarDocumentoPDF(plantillas);
-    } catch (error) {
-      console.error('Error al exportar PDF:', error);
-      alert('Ocurrió un error al intentar exportar el PDF.');
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const btnExportar = document.getElementById('exportar-pdf');
-    if (btnExportar) {
-      btnExportar.addEventListener('click', exportarPlantillasAPDF);
-    }
-  });
-</script>
-
-
+    <script src="./js/darkMode.js"></script>
   </body>
 </html>
