@@ -1,81 +1,66 @@
-// store.js - Gestión centralizada del estado de plantillas
+function createStore(initialStore = []) {
+  // Vamos a crear el estado principal de mi Store
+  let state = initialStore;
+  // Observers => Funciones que se encargaran de los cambios
+  const listeners = [];
 
-function createStore(initialState = []) {
-    // Estado principal de la Store
-    let state = initialState;
-    
-    // Array de funciones observadoras que se ejecutan cuando hay cambios
-    const listeners = [];
-    
-    // Obtener el estado actual
-    function getState() {
-        return state;
-    }
-    
-    // Establecer un nuevo estado (privado)
-    function setState(newState) {
-        state = newState;
-        // Notificar a todos los observadores sobre el cambio
-        notifyListeners();
-    }
-    
-    // Agregar una nueva plantilla (inmutable)
-    function addTemplate(newTemplate) {
-        // Crear nuevo array sin mutar el original
-        const newState = [...state, newTemplate];
-        setState(newState);
-    }
-    
-    // Eliminar una plantilla por índice (inmutable)
-    function removeTemplate(index) {
-        // Crear nuevo array filtrando el elemento a eliminar
-        const newState = state.filter((_, i) => i !== index);
-        setState(newState);
-    }
-    
-    // Suscribir una función para que se ejecute cuando hay cambios
-    function subscribe(listener) {
-        listeners.push(listener);
-        
-        // Retornar función para desuscribirse
-        return function unsubscribe() {
-            const index = listeners.indexOf(listener);
-            if (index > -1) {
-                listeners.splice(index, 1);
-            }
-        };
-    }
-    
-    // Notificar a todos los observadores
-    function notifyListeners() {
-        listeners.forEach(listener => listener(state));
-    }
-    
-    // API pública de la Store
-    return {
-        getState,
-        addTemplate,
-        removeTemplate,
-        subscribe
+  // Vamos a usar un metodo para mostrar el valor del state
+  function getState() {
+    return state;
+  }
+
+  // Esta funcion se va encargar de manipular el nuevo estado
+  function setState(newState) {
+    state = newState;
+    // cuando el estado cambie vamos a llamar a las funciones que fueron suscritas
+    // para eso se require iterar el arreglo listeners
+    listeners.forEach(function (listener) {
+      listener(state);
+    });
+  }
+
+  function removeTemplate(index) {
+    const newState = state.filter((_, i) => i !== index);
+    setState(newState);
+  }
+
+  function editTemplate(index, updatedTemplate) {
+    const newState = state.map((item, i) => i === index ? updatedTemplate : item);
+    setState(newState);
+  }
+
+  function addTemplate(newTemplate) {
+    // Insertar este nuevo elemento en el array state
+    //  ... => Spread operator, que nos permite copiar el contenido de un array
+    const newState = [...state, newTemplate];
+    setState(newState);
+  }
+
+  function suscribe(listener) {
+    listeners.push(listener);
+    // aseguramos que no se suscriban 2 listener iguales
+    return () => {
+      // buscar el listener
+      const index = listeners.indexOf(listener);
+      // retorna la posicion (index)
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
     };
+  }
+
+  return {
+    getState,
+    addTemplate,
+    setState,
+    suscribe,
+    removeTemplate,
+    editTemplate
+  };
 }
 
-// Plantillas de ejemplo para inicializar la Store
-const initialTemplates = [
-    new Template(
-        "Bienvenida a Nuevos Clientes",
-        "¡Hola {nombre}! 👋 Bienvenido/a a nuestra familia. Estamos emocionados de tenerte con nosotros. Si tienes alguna pregunta, no dudes en contactarnos. ¡Gracias por elegirnos! 🎉",
-        "#bienvenida #clientes"
-    ),
-    new Template(
-        "Seguimiento de Pedido",
-        "Hola {nombre}, tu pedido #{numero_pedido} está en camino 🚚. Llegará aproximadamente el {fecha_entrega}. Puedes rastrear tu envío en: {link_rastreo}. ¡Gracias por tu compra! 📦✨",
-        "#pedidos #seguimiento #ventas"
-    )
-];
+const templateStore = createStore(getPersistenceData());
 
-// Crear la instancia global de la Store
-const templateStore = createStore(initialTemplates);
-
-// Hacer la Store disponible globalmente
+// Para crear una variable de manera global en todos mis archivos
 window.templateStore = templateStore;
+
