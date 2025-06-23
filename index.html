@@ -6,6 +6,8 @@
     <title>Gestor de Plantillas WhatsApp</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   </head>
   <body class="bg-gradient-to-br from-green-50 to-emerald-100 min-h-screen">
     <div class="container mx-auto max-w-6xl px-4 py-8">
@@ -322,9 +324,102 @@
       </div>
     </div>
 
+    <!-- Librerías necesarias -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Scripts de la aplicación -->
     <script src="./js/models/models.js"></script>
     <script src="./js/persistence.js"></script>
     <script src="./js/store.js"></script>
     <script src="./js/app.js"></script>
+    <script src="./js/export-pdf.js"></script>
+    <script type="module" src="js/export-pdf.js"></script>
+
+    <!-- Asegúrate de tener este botón en tu HTML -->
+<button id="exportar-pdf">Exportar PDF</button>
+
+<!-- Librería jsPDF (debe ir ANTES del script que la usa) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- Script para exportar a PDF (pegar completo antes del </body>) -->
+<script>
+  function obtenerPlantillas() {
+    return JSON.parse(localStorage.getItem('plantillas')) || [];
+  }
+
+  async function cargarLibreriajsPDF() {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        script.onload = () => {
+          if (window.jspdf && window.jspdf.jsPDF) resolve();
+          else reject(new Error('jsPDF no cargó correctamente'));
+        };
+        script.onerror = () => reject(new Error('Error al cargar jsPDF'));
+        document.head.appendChild(script);
+      });
+    }
+  }
+
+  function generarDocumentoPDF(plantillas) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text('Mis Plantillas de WhatsApp', 20, 20);
+
+    let y = 35;
+    const espacio = 10;
+
+    plantillas.forEach((plantilla, index) => {
+      doc.setFontSize(12);
+      doc.text(`${index + 1}. ${plantilla.nombre}`, 20, y);
+      y += espacio;
+
+      const mensaje = doc.splitTextToSize(plantilla.mensaje, 160);
+      mensaje.forEach(linea => {
+        doc.text(linea, 25, y);
+        y += 7;
+      });
+
+      y += 5;
+
+      if (y > 270) {
+        doc.addPage();
+        y = 20;
+      }
+    });
+
+    doc.save('plantillas.pdf');
+  }
+
+  async function exportarPlantillasAPDF() {
+    try {
+      await cargarLibreriajsPDF();
+
+      const plantillas = obtenerPlantillas();
+
+      if (!plantillas.length) {
+        alert('No hay plantillas para exportar.');
+        return;
+      }
+
+      generarDocumentoPDF(plantillas);
+    } catch (error) {
+      console.error('Error al exportar PDF:', error);
+      alert('Ocurrió un error al intentar exportar el PDF.');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnExportar = document.getElementById('exportar-pdf');
+    if (btnExportar) {
+      btnExportar.addEventListener('click', exportarPlantillasAPDF);
+    }
+  });
+</script>
+
+
   </body>
 </html>

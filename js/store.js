@@ -63,3 +63,4 @@ const templateStore = createStore(getPersistenceData());
 
 // Para crear una variable de manera global en todos mis archivos
 window.templateStore = templateStore;
+
